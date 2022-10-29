@@ -111,3 +111,14 @@ header {
   padding: 8px;
   margin: 8px;
 }
+
+.trash_icon {
+  margin-left: 6px;
+  width: 15px;
+  height: 35px;
+}
+
+.div_principal {
+  margin-left: 10%;
+  margin-right: 10%;
+}

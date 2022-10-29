@@ -13,6 +13,31 @@
             var botaoPesquisar = document.querySelector("#botaoPesquisar");
             botaoPesquisar.addEventListener("click", carregarConteudos);
 
+            function adicionarConteudo() {
+                //pega a div dos conteúdos 
+                var containerConteudos = document.querySelector("#containerConteudos");
+
+                //clona o conteúdo clicado
+                var divDoConteudo = this.cloneNode(true);
+
+                //Cria os elementos para o botão de remover
+                trashIcon = document.createElement("img");
+                trashIcon.setAttribute("src", "trash.svg");
+                trashIcon.classList.add("trash_icon");
+                trashIcon.addEventListener("click", () => {
+                    divDoConteudo.remove();
+                });
+
+                //adiciona o botão de remover na div do conteúdo
+                divDoConteudo.childNodes[0].appendChild(trashIcon);
+
+                //remove o conteúdo clicado da pesquisa
+                this.remove();
+
+                //insere o conteúdo clicado na div dos conteúdos
+                containerConteudos.insertAdjacentElement("beforeend", divDoConteudo);
+            }
+
             function carregarConteudos() {
                 var xhttp = new XMLHttpRequest();
                 parametroTitulo = document.querySelector("#tituloConteudo").value;
@@ -54,9 +79,12 @@
                                     //Adiciona titulo e a img na div
                                     divConteudo.appendChild(tituloConteudo);
                                     divConteudo.appendChild(img);
-                                    //Adiciona a div no divConteudos
 
+                                    //Adiciona a div no divConteudos
                                     divConteudos.insertAdjacentElement("beforeend", divConteudo);
+
+                                    //Adiciona a função adicionarConteudo ao clicar na div do conteúdo.
+                                    divConteudo.addEventListener("click", adicionarConteudo, false);
                                 }
                             }
                         }
@@ -90,6 +118,7 @@
 
     </header>
     <div class="div_principal">
+        <div class="container_conteudos" id="containerConteudos"></div>
         <div class="w3-modal" id="id01">
             <div class="w3-modal-content">
                 <div class="div_pesquisa">
