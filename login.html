@@ -10,7 +10,22 @@
 
         window.onload = function () {
             var submit = document.getElementById("submit");
-            submit.addEventListener("click", logar);
+            submit.addEventListener("click", validarDados);
+
+            function validarDados() {
+                var email = document.getElementById("email").value;
+                var senha = document.getElementById("password").value;
+                if (email == "" || senha == "") {
+                    alert("Preencha todos os campos!");
+                    return false;
+                }
+                if(email.length < 4 || senha.length < 4){
+                    alert("Os dados devem ter mais de 3 caracteres!");
+                    return false;
+                }
+                logar();
+            }
+
             function logar() {
                 var xhttp = new XMLHttpRequest();
                 var email = document.querySelector("#email").value;
@@ -24,6 +39,9 @@
                         console.log(token);
                         localStorage.setItem("token", token); //salva o token no localStorage, com o nome de token
                         window.location.href = "favoritos.html";
+                    }
+                    else if (this.readyState == 4 && this.status == 400) { //Verificando se a requisição foi mal sucedida com status 400
+                        alert("Usuário ou senha inválidos!");
                     }
                 }
             }
