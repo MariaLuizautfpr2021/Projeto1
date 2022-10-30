@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disney+ As melhores histórias em um só lugar</title>
+    <link rel="stylesheet" href="login.css">
+    <script>
+
+        window.onload = function () {
+            var submit = document.getElementById("submit");
+            submit.addEventListener("click", logar);
+            function logar() {
+                var xhttp = new XMLHttpRequest();
+                var email = document.querySelector("#email").value;
+                var password = document.querySelector("#password").value;
+                xhttp.open("POST", "https://reqres.in/api/login", true); //Requisição do tipo POST para a API na rota de login
+                xhttp.setRequestHeader("Content-type", "application/json");
+                xhttp.send(JSON.stringify({ email: email, password: password }));//Passando os valores de email e password (como JSON)
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) { //Verificando se a requisição foi bem sucedida com status 200(ok)
+                        var token = JSON.parse(this.response).token; //converte o JSON para objeto para podermos acessar a propriedade token
+                        console.log(token);
+                        localStorage.setItem("token", token); //salva o token no localStorage, com o nome de token
+                        window.location.href = "favoritos.html";
+                    }
+                }
+            }
+        }
+
+    </script>
+</head>
+
+<body>
+    <header>
+        <a href="index.html" class="logo"><img class="logo" src="logo-nopad.svg" alt="Disney Plus"></a>
+    </header>
+
+    <div class="login">
+        <div class="login_container">
+            <h2 style="margin-bottom: 8px;">Use o seu e-mail para entrar</h2>
+            <span>Você usará esse e-mail e senha para entrar na conta do Disney+ e assistir
+                suas séries e filmes preferidos</span>
+            <form class="login_form" onsubmit="event.preventDefault();">
+                <input type="email" id="email" placeholder="E-mail">
+                <input type="password" id="password" placeholder="Senha">
+                <button type="submit" id="submit" class="button_entrar">Entrar</button>
+            </form>
+            <p>Não tem uma conta? <a href="#">Cadastre-se</a></p>
+            <p><a href="#">Precisa de ajuda?</a></p>
+        </div>
+    </div>
+</body>
