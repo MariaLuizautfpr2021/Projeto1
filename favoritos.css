@@ -122,3 +122,9 @@ header {
   margin-left: 10%;
   margin-right: 10%;
 }
+
+.div_adicionar_token{
+  display: flex; 
+  justify-content: space-between; 
+  margin-top:32px;
+}

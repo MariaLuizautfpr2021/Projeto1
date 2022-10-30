@@ -8,7 +8,20 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="favoritos.css">
     <script>
+
+        function deslogar() {
+            window.location.href = "index.html";
+            localStorage.removeItem("token")
+        }
+
         window.onload = function () {
+
+            var token = localStorage.getItem("token");
+            if (token == null) {
+                window.location.href = "login.html";
+            }
+            var tokenText = document.getElementById("tokenText");
+            tokenText.innerText = "Token: " + token;
 
             var botaoPesquisar = document.querySelector("#botaoPesquisar");
             botaoPesquisar.addEventListener("click", carregarConteudos);
@@ -43,7 +56,7 @@
                 parametroTitulo = document.querySelector("#tituloConteudo").value;
                 xhttp.open(
                     "GET",
-                    "https://api.watchmode.com/v1/autocomplete-search/?apiKey=1cAcid7cUjmDekHkF4JmwVMzuKBGYEerzwtcAh89&search_value=" + parametroTitulo + "&search_type=1",
+                    "https://api.watchmode.com/v1/autocomplete-search/?apiKey=TyMR7UlCLKumCNZ5kqZPQHUJPf4ehs6xd35FjYa4&search_value=" + parametroTitulo + "&search_type=1", // apiKey é a chave de acesso à API, limite de 1000 requisições gratuitas
                     true
                 );
                 xhttp.responseType = "json";
@@ -110,14 +123,22 @@
                     <li><a href="favoritos.html" style="color: #2c7aed">Favoritos</a></li>
                 </ul>
             </nav>
-            <a href="#"><button class="btn_adicionar_favorito"
-                    onclick="document.getElementById('id01').style.display='block'">
-                    Adicionar Favorito
-                </button></a>
+            <div style="display: flex;">
+                <h5>Seja bem-vindo</h5>
+                <h5 style="color: #2c7aed; cursor: pointer;" onclick="deslogar()">, Sair</h5>
+            </div>
         </div>
 
     </header>
     <div class="div_principal">
+        <div class="div_adicionar_token">
+            <a href="#"><button class="btn_adicionar_favorito"
+                    onclick="document.getElementById('id01').style.display='block'">
+                    Adicionar Favorito
+                </button></a>
+            <span id="tokenText" style="color: #ffffff; font-size: large;"></span>
+        </div>
+        <hr style="width:100%; margin-top: 32px;">
         <div class="container_conteudos" id="containerConteudos"></div>
         <div class="w3-modal" id="id01">
             <div class="w3-modal-content">
@@ -133,6 +154,7 @@
                             Buscar
                         </button>
                     </div>
+                    <hr style="width:80%;border-color: #c5c5c5;">
                     <div id="divConteudos">
                         <h3>Selecione o Título desejado</h3>
                     </div>
