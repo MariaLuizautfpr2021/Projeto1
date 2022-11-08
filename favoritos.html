@@ -15,7 +15,20 @@
         }
 
         window.onload = function () {
-
+            function validarDados() {
+                var msg = document.getElementById("msg");
+                var titulo = document.getElementById("tituloConteudo").value;
+                if (titulo == "") {
+                    msg.innerHTML = ("Preencha o campo de pesquisa");
+                    return false;
+                }
+                if (titulo.length < 3) {
+                    msg.innerHTML = ("O titulo deve ter mais de 2 caracteres!");
+                    return false;
+                }
+                msg.innerText = "";
+                carregarConteudos();
+            }
             var token = localStorage.getItem("token");
             if (token == null) {
                 window.location.href = "login.html";
@@ -24,7 +37,7 @@
             tokenText.innerText = "Token: " + token;
 
             var botaoPesquisar = document.querySelector("#botaoPesquisar");
-            botaoPesquisar.addEventListener("click", carregarConteudos);
+            botaoPesquisar.addEventListener("click", validarDados);
 
             function adicionarConteudo() {
                 //pega a div dos conteúdos 
@@ -153,6 +166,7 @@
                         <button type="button" id="botaoPesquisar">
                             Buscar
                         </button>
+                        <p id="msg" class="erro"></p>
                     </div>
                     <hr style="width:80%;border-color: #c5c5c5;">
                     <div id="divConteudos">
