@@ -13,14 +13,15 @@
             submit.addEventListener("click", validarDados);
 
             function validarDados() {
+                var msg = document.getElementById("msg");
                 var email = document.getElementById("email").value;
                 var senha = document.getElementById("password").value;
                 if (email == "" || senha == "") {
-                    alert("Preencha todos os campos!");
+                    msg.innerText = ("Preencha todos os campos!");
                     return false;
                 }
                 if(email.length < 4 || senha.length < 4){
-                    alert("Os dados devem ter mais de 3 caracteres!");
+                    msg.innerText = ("Os dados devem ter mais de 3 caracteres!");
                     return false;
                 }
                 logar();
@@ -34,14 +35,19 @@
                 xhttp.setRequestHeader("Content-type", "application/json");
                 xhttp.send(JSON.stringify({ email: email, password: password }));//Passando os valores de email e password (como JSON)
                 xhttp.onreadystatechange = function () {
+                    var msg = document.querySelector("#msg");
                     if (this.readyState == 4 && this.status == 200) { //Verificando se a requisição foi bem sucedida com status 200(ok)
                         var token = JSON.parse(this.response).token; //converte o JSON para objeto para podermos acessar a propriedade token
                         console.log(token);
                         localStorage.setItem("token", token); //salva o token no localStorage, com o nome de token
-                        window.location.href = "favoritos.html";
+                        msg.innerText = ("Conectado com sucesso!");
+                        msg.classList = "sucesso"
+                        setTimeout(function () {
+                            window.location.href = "favoritos.html";
+                        }, 2000);
                     }
                     else if (this.readyState == 4 && this.status == 400) { //Verificando se a requisição foi mal sucedida com status 400
-                        alert("Usuário ou senha inválidos!");
+                        msg.innerText = ("Usuário ou senha inválidos!");
                     }
                 }
             }
@@ -64,9 +70,12 @@
                 <input type="email" id="email" placeholder="E-mail">
                 <input type="password" id="password" placeholder="Senha">
                 <button type="submit" id="submit" class="button_entrar">Entrar</button>
+                <p id="msg" class="erro"></p>
             </form>
             <p>Não tem uma conta? <a href="#">Cadastre-se</a></p>
             <p><a href="#">Precisa de ajuda?</a></p>
+            
+           
         </div>
     </div>
 </body>

@@ -73,3 +73,13 @@
     margin-top: 16px;
     margin-bottom: 16px;
   }
+
+  .sucesso {
+    font-weight: bold; 
+    color: chartreuse;
+  }
+
+  .erro {
+    font-weight: 600; 
+    color: red;
+  }
