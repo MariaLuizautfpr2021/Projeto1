@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disney+ As melhores histórias em um só lugar</title>
+    <link rel="stylesheet" href="register.css">
+    <script>
+       window.onload = function () {
+            var submit = document.getElementById("submit");
+            submit.addEventListener("click", validarDados);
+
+            function validarDados() {
+                var msg = document.getElementById("msg");
+                var name = document.getElementById("name").value;
+                var lastName = document.getElementById("lastName").value;
+                var phone = document.getElementById("phone").value;
+                var email = document.getElementById("email").value;
+                var senha = document.getElementById("password").value;
+                if (email == "" || senha == "" || name == "" || lastName == "" || phone == "") {
+                    msg.innerText = ("Preencha todos os campos!");
+                    return false;
+                }
+                if(phone.length < 11){
+                    msg.innerText = ("O telefone deve ter 11 dígitos!");
+                    return false;
+                }
+                if(email.length < 4 || senha.length < 4 || name.length < 4 || lastName.length < 4){
+                    msg.innerText = ("Os dados devem ter mais de 3 caracteres!");
+                    return false;
+                }
+                
+                cadastrar();
+            }
+
+            function cadastrar(){
+
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <header>
+        <a href="index.html" class="logo"><img class="logo" src="logo-nopad.svg" alt="Disney Plus"></a>
+    </header>
+    <div class="register">
+        <div class="register_container">
+            <h2 style="margin-bottom: 8px;">Entre com suas informações para obter acesso ao site</h2>
+            <span>Você usará esse e-mail e senha para entrar na conta do Disney+ e assistir
+                suas séries e filmes preferidos</span>
+            <form class="register_form" onsubmit="event.preventDefault();">
+                <input type="text" id="name" placeholder="Nome">
+                <input type="text" id="lastName" placeholder="Sobrenome">
+                <input type="tel" id="phone" placeholder="Telefone para contato">
+                <input type="email" id="email" placeholder="E-mail">
+                <input type="password" id="password" placeholder="Senha">
+                <button type="submit" id="submit" class="button_register">Registrar</button>
+                <p id="msg" class="erro"></p>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
