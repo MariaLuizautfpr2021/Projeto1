@@ -9,6 +9,8 @@ var usersRouter = require('./src/routes/users');
 
 var app = express();
 
+const mongoose = require("mongoose");
+require("dotenv").config();
 // view engine setup
 app.set('views', path.join(__dirname, './src/views'));
 app.set('view engine', 'pug');
@@ -19,16 +21,24 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+try {
+  mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true });
+  console.log("db connected");
+} catch (err) {
+  console.log(err);
+}
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
