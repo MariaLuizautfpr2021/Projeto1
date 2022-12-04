@@ -14,6 +14,40 @@
             localStorage.removeItem("token")
         }
 
+        function consultarData() {
+            
+            var token = localStorage.getItem("token");
+            if (token == null) {
+                window.location.href = "login.html";
+            }
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.open("POST", "http://localhost:3000/users/data", true);
+            xhttp.setRequestHeader("Content-type", "application/json");
+            xhttp.setRequestHeader("Authorization", `Bearer ${localStorage.getItem("token")}`);
+            xhttp.send();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    const user = JSON.parse(this.responseText);
+
+                    if (user.permission == 1) {
+                        var ulMenu = document.getElementById("ulMenu");
+                        var li = document.createElement("li");
+                        var a = document.createElement("a");
+                        a.href = "admin.html";
+                        a.innerText = "Admin";
+                        li.appendChild(a);
+                        ulMenu.appendChild(li);
+                    }
+
+
+                }
+                else if (this.readyState == 4 && this.status == 401) {
+                    window.location.href = "login.html";
+                }
+            }
+        }
+        consultarData();
         window.onload = function () {
             function validarDados() {
                 var msg = document.getElementById("msg");
@@ -29,12 +63,17 @@
                 msg.innerText = "";
                 carregarConteudos();
             }
+
             var token = localStorage.getItem("token");
-            if (token == null) {
-                window.location.href = "login.html";
-            }
             var tokenText = document.getElementById("tokenText");
-            tokenText.innerText = "Token: " + token;
+
+            if (token.length > 50) {
+                tokenText.innerText = "Token: " + token.substring(0, 50) + "...";
+            }
+            else {
+                tokenText.innerText = "Token: " + token;
+            }
+
 
             var botaoPesquisar = document.querySelector("#botaoPesquisar");
             botaoPesquisar.addEventListener("click", validarDados);
@@ -126,7 +165,7 @@
         <div class="div__nav">
             <a href="index.html" class="logo"><img class="logo" src="logo-nopad.svg" alt="Disney Plus"></a>
             <nav>
-                <ul class="nav__links">
+                <ul class="nav__links" id="ulMenu">
                     <li>
                         <a href="filmes.html">Filmes</a>
                     </li>
@@ -149,7 +188,7 @@
                     onclick="document.getElementById('id01').style.display='block'">
                     Adicionar Favorito
                 </button></a>
-            <span id="tokenText" style="color: #ffffff; font-size: large;"></span>
+            <span id="tokenText" style="color: #ffffff; font-size: large"></span>
         </div>
         <hr style="width:100%; margin-top: 32px;">
         <div class="container_conteudos" id="containerConteudos"></div>

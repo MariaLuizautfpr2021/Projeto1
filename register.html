@@ -7,7 +7,7 @@
     <title>Disney+ As melhores histórias em um só lugar</title>
     <link rel="stylesheet" href="register.css">
     <script>
-       window.onload = function () {
+        window.onload = function () {
             var submit = document.getElementById("submit");
             submit.addEventListener("click", validarDados);
 
@@ -17,25 +17,43 @@
                 var lastName = document.getElementById("lastName").value;
                 var phone = document.getElementById("phone").value;
                 var email = document.getElementById("email").value;
-                var senha = document.getElementById("password").value;
-                if (email == "" || senha == "" || name == "" || lastName == "" || phone == "") {
+                var password = document.getElementById("password").value;
+                if (email == "" || password == "" || name == "" || lastName == "" || phone == "") {
                     msg.innerText = ("Preencha todos os campos!");
                     return false;
                 }
-                if(phone.length < 11){
+                if (phone.length < 11) {
                     msg.innerText = ("O telefone deve ter 11 dígitos!");
                     return false;
                 }
-                if(email.length < 4 || senha.length < 4 || name.length < 4 || lastName.length < 4){
+                if (email.length < 4 || password.length < 4 || name.length < 4 || lastName.length < 4) {
                     msg.innerText = ("Os dados devem ter mais de 3 caracteres!");
                     return false;
                 }
-                
-                cadastrar();
+
+                cadastrar(name, lastName, phone, email, password);
             }
 
-            function cadastrar(){
+            function cadastrar(name, lastName, phone, email, password) {
 
+                var xhttp = new XMLHttpRequest();
+                xhttp.open("POST", "http://localhost:3000/users", true);
+                xhttp.setRequestHeader("Content-type", "application/json");
+                xhttp.send(JSON.stringify({ name: name, lastName: lastName, phone: phone, email: email, password: password }));
+                xhttp.onreadystatechange = function () {
+                    var msg = document.querySelector("#msg");
+                    if (this.readyState == 4 && this.status == 201) {
+                        msg.innerText = ("Cadastrado com sucesso!");
+                        msg.classList = "sucesso"
+                        setTimeout(function () {
+                            window.location.href = "login.html";
+                        }, 2000);
+
+                    }
+                    else if (this.readyState == 4 && this.status == 400) {
+                        msg.innerText = this.responseText;
+                    }
+                }
             }
         }
     </script>
