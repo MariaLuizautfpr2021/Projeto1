@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disney+ As melhores histórias em um só lugar</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="cadastrarFilmes.css">
+    <script>
+
+        function deslogar() {
+            window.location.href = "index.html";
+            localStorage.removeItem("token")
+        }
+
+        function consultarData() {
+
+            var token = localStorage.getItem("token");
+            if (token == null) {
+                window.location.href = "login.html";
+            }
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.open("POST", "http://localhost:3000/users/data", true);
+            xhttp.setRequestHeader("Content-type", "application/json");
+            xhttp.setRequestHeader("Authorization", `Bearer ${localStorage.getItem("token")}`);
+            xhttp.send();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    const user = JSON.parse(this.responseText);
+
+                    if (user.permission == 0) {
+                        window.location.href = "login.html";
+                    }
+
+                }
+                else if (this.readyState == 4 && this.status == 401) {
+                    window.location.href = "login.html";
+                }
+            }
+        }
+        consultarData();
+        window.onload = function () {
+            var submit = document.getElementById("submit");
+            submit.addEventListener("click", validarDados);
+            function validarDados(){
+                var msg = document.getElementById("msg");
+                var titulo = document.getElementById("titulo").value;
+                var descricao = document.getElementById("descricao").value;
+                var genero = document.getElementById("genero").value;
+                var imagem = document.getElementById("imagem").value;
+
+                if (titulo == "" || descricao == "" || genero == "") {
+                    msg.innerHTML = ("Preencha todos os campos!");
+                    return false;
+                }
+                if (titulo.length < 3 || descricao.length < 3 || genero.length < 3) {
+                    msg.innerHTML = ("Os campos devem ter mais de 3 caracteres!");
+                    return false;
+                }
+
+                
+                salvar(titulo, descricao, genero, imagem);
+            }
+            function salvar(titulo, descricao, genero, imagem) {
+                var msg = document.getElementById("msg");
+                var xhttp = new XMLHttpRequest();
+                xhttp.open("POST", "http://localhost:3000/movies", true);
+                xhttp.setRequestHeader("Content-type", "application/json");
+                xhttp.setRequestHeader("Authorization", `Bearer ${localStorage.getItem("token")}`);
+                xhttp.send(JSON.stringify({
+                    "title": titulo,
+                    "description": descricao,
+                    //"image": document.getElementById("imagem").value,
+                    "genre": genero,
+                }));
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 201) {
+                        msg.classList = "sucesso";
+                        msg.innerText = "Filme cadastrado com sucesso!";
+                    }
+                    else if ((this.readyState == 4 && this.status == 401)|| (this.readyState == 4 && this.status == 400)) {
+                        msg.innerText = "Não foi possível cadastrar o filme!";
+                    }
+                }
+            }
+        }
+
+    </script>
+</head>
+
+<body>
+    <header>
+        <div class="div__nav">
+            <a href="index.html" class="logo"><img class="logo" src="logo-nopad.svg" alt="Disney Plus"></a>
+            <nav>
+                <ul class="nav__links" id="ulMenu">
+                    <li>
+                        <a href="filmes.html">Filmes</a>
+                    </li>
+                    <li>
+                        <a href="series.html">Séries</a>
+                    </li>
+                    <li><a href="favoritos.html">Favoritos</a></li>
+                    <li><a href="cadastrarFilmes.html" style="color: #2c7aed">Admin</a></li>
+                </ul>
+            </nav>
+            <div style="display: flex;">
+                <h5>Seja bem-vindo</h5>
+                <h5 style="color: #2c7aed; cursor: pointer;" onclick="deslogar()">, Sair</h5>
+            </div>
+        </div>
+
+    </header>
+    <div class="div_principal">
+        <div class="register">
+            <div class="register_container">
+                <h2 style="margin-bottom: 8px;">Cadastre um filme</h2>
+                <span>Entre comas informações necessárias para cadastrar um filme</span>
+                <form class="register_form" onsubmit="event.preventDefault();">
+                    <input type="text" id="titulo" placeholder="Título">
+                    <input type="text" id="descricao" placeholder="Descrição">
+                    <input type="text" id="genero" placeholder="Gênero">
+                    <label for="imagem" style="margin-top: 8px;">Escolha uma imagem de capa:</label>
+                    <input type="file" id="imagem" name="imagem" accept="image/png, image/jpeg">
+                    <button type="submit" id="submit" class="button_register">Salvar</button>
+                    <p id="msg" class="erro"></p>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
