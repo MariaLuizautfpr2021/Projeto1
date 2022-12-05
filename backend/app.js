@@ -7,6 +7,7 @@ var cors = require('cors')
 
 var indexRouter = require('./src/routes/index');
 var usersRouter = require('./src/routes/users');
+var moviesRouter = require('./src/routes/movies');
 
 var app = express();
 
@@ -32,6 +33,7 @@ try {
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/movies', moviesRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
