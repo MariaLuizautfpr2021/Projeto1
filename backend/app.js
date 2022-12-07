@@ -17,6 +17,8 @@ require("dotenv").config();
 app.set('views', path.join(__dirname, './src/views'));
 app.set('view engine', 'pug');
 
+app.use("/files", express.static(path.resolve(__dirname, "uploads", "images"))); // para acessar as imagens
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

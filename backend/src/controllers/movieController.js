@@ -12,7 +12,7 @@ exports.getMovies = async function () {
 exports.createMovie = async function (movie) {
     try {
         var validation;
-            
+
         if (validation) {
             return validation;
         }
@@ -22,5 +22,13 @@ exports.createMovie = async function (movie) {
     catch (err) {
         console.log(err);
         return null;
+    }
+};
+
+exports.createImage = async (id, imageUrl) => {
+    try {
+        return await Movie.findOneAndUpdate({ _id: id }, { imageURL: imageUrl }, { new: true });
+    } catch (err) {
+        console.log(err);
     }
 };
