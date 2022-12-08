@@ -8,8 +8,13 @@ const uploadConfig = require("../multer_config/upload");
 const upload = multer(uploadConfig.upload("./uploads/images"));
 
 router.get('/', jwt({ secret: process.env.SECRET, algorithms: ["HS256"] }), async function (req, res, next) {
+    var searchValue = req.query.search_value;
+    if (searchValue) {
+        var movies = await movieController.searchMovies(searchValue);
+        return res.send(movies);
+    }
+    
     var movies = await movieController.getMovies();
-    console.log(movies)
     return res.send(movies);
 });
 
@@ -31,7 +36,7 @@ router.patch("/:id/image", jwt({ secret: process.env.SECRET, algorithms: ["HS256
     if (!file) {
         return res.status(400).send("Erro ao atualizar imagem!");
     }
-    
+
     const response = await movieController.createImage(id, imageUrl);
     return res.status(200).send(response);
 

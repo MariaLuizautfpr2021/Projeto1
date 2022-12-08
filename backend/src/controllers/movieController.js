@@ -9,6 +9,15 @@ exports.getMovies = async function () {
     }
 }
 
+exports.searchMovies = async function (searchValue) {
+    try {
+        return await Movie.find({title: new RegExp(searchValue, 'i') }).limit(20);
+
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 exports.createMovie = async function (movie) {
     try {
         var validation;

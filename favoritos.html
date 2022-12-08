@@ -15,7 +15,7 @@
         }
 
         function consultarData() {
-            
+
             var token = localStorage.getItem("token");
             if (token == null) {
                 window.location.href = "login.html";
@@ -108,25 +108,25 @@
                 parametroTitulo = document.querySelector("#tituloConteudo").value;
                 xhttp.open(
                     "GET",
-                    "https://api.watchmode.com/v1/autocomplete-search/?apiKey=TyMR7UlCLKumCNZ5kqZPQHUJPf4ehs6xd35FjYa4&search_value=" + parametroTitulo + "&search_type=1", // apiKey é a chave de acesso à API, limite de 1000 requisições gratuitas
+                    "http://localhost:3000/movies?search_value=" + parametroTitulo, // apiKey é a chave de acesso à API, limite de 1000 requisições gratuitas
                     true
                 );
+                xhttp.setRequestHeader("Content-type", "application/json");
+                xhttp.setRequestHeader("Authorization", `Bearer ${localStorage.getItem("token")}`);
                 xhttp.responseType = "json";
                 xhttp.send();
 
                 xhttp.onreadystatechange = function () {
                     if (this.readyState == 4 && this.status == 200) {
-                        console.log(this.response.results);
-                        response = this.response;
-                        if (response.results) {
+
+                        if (this.response) {
                             //limpando a div, para limpar os resultados anteriores
                             var divConteudos = document.getElementById("divConteudos");
                             divConteudos.innerHTML = "<h3>Selecione o Título desejado</h3>";
                             // para cada objeto do array, vou criar um elemento html
-                            for (var i = 0; i < response.results.length; i++) {
-                                var item = response.results[i];
-                                var imgResponse = item.image_url;
-
+                            for (var i = 0; i < this.response.length; i++) {
+                                var item = this.response[i];
+                                var imgResponse = item.imageURL;
                                 if (imgResponse) {
                                     //Cria div para por elementos
                                     var divConteudo = document.createElement("div");
@@ -134,17 +134,21 @@
 
                                     //Cria h5 para o titulo
                                     var tituloConteudo = document.createElement("h5");
-                                    tituloConteudo.innerHTML = item.name;
+                                    tituloConteudo.innerHTML = item.title;
 
                                     //Cria a imagem do Conteudo
                                     var img = document.createElement("img");
                                     img.classList.add("img_conteudo");
-                                    img.setAttribute("src", imgResponse);
+                                    img.setAttribute("src", `http://localhost:3000/files/${imgResponse}`);
 
                                     //Adiciona titulo e a img na div
                                     divConteudo.appendChild(tituloConteudo);
                                     divConteudo.appendChild(img);
 
+                                    var descricaoConteudo = document.createElement("p");
+                                    descricaoConteudo.innerHTML = item.description;
+                                    divConteudo.appendChild(descricaoConteudo);
+                                    
                                     //Adiciona a div no divConteudos
                                     divConteudos.insertAdjacentElement("beforeend", divConteudo);
 
