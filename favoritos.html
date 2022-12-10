@@ -49,6 +49,8 @@
         }
         consultarData();
         window.onload = function () {
+            var bemVindoText = document.getElementById("bemVindoText");
+            bemVindoText.innerText = "Seja bem-vindo, " + localStorage.getItem("username");
             function validarDados() {
                 var msg = document.getElementById("msg");
                 var titulo = document.getElementById("tituloConteudo").value;
@@ -186,7 +188,7 @@
                 </ul>
             </nav>
             <div style="display: flex;">
-                <h5>Seja bem-vindo</h5>
+                <h5 id="bemVindoText">Seja bem-vindo, </h5>
                 <h5 style="color: #2c7aed; cursor: pointer;" onclick="deslogar()">, Sair</h5>
             </div>
         </div>

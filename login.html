@@ -20,7 +20,7 @@
                     msg.innerText = ("Preencha todos os campos!");
                     return false;
                 }
-                if(email.length < 4 || senha.length < 4){
+                if (email.length < 4 || senha.length < 4) {
                     msg.innerText = ("Os dados devem ter mais de 3 caracteres!");
                     return false;
                 }
@@ -42,12 +42,30 @@
                         localStorage.setItem("token", token); //salva o token no localStorage, com o nome de token
                         msg.innerText = ("Conectado com sucesso!");
                         msg.classList = "sucesso"
-                        setTimeout(function () {
-                            window.location.href = "favoritos.html";
-                        }, 2000);
+                        receberData();
+
                     }
                     else if (this.readyState == 4 && this.status == 403) { //Verificando se a requisição foi mal sucedida com status 400
                         msg.innerText = ("Usuário ou senha inválidos!");
+                    }
+                }
+
+            }
+
+            function receberData() {
+                var xhttp = new XMLHttpRequest();
+                xhttp.open("POST", "https://projeto1-production-aefd.up.railway.app/users/data", true);
+                xhttp.setRequestHeader("Content-type", "application/json");
+                xhttp.setRequestHeader("Authorization", `Bearer ${localStorage.getItem("token")}`);
+                xhttp.send();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        console.log(this.response);
+                        var data = JSON.parse(this.response);
+                        localStorage.setItem("username", data.name);
+                        setTimeout(function () {
+                            window.location.href = "favoritos.html";
+                        }, 2000);
                     }
                 }
             }
@@ -74,8 +92,8 @@
             </form>
             <p>Não tem uma conta? <a href="register.html">Cadastre-se</a></p>
             <p><a href="#">Precisa de ajuda?</a></p>
-            
-           
+
+
         </div>
     </div>
 </body>
