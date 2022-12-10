@@ -19,6 +19,9 @@ router.get('/', jwt({ secret: process.env.SECRET, algorithms: ["HS256"] }), asyn
 });
 
 router.post('/', jwt({ secret: process.env.SECRET, algorithms: ["HS256"] }), async function (req, res, next) {
+    if (req.auth.permission == 0){
+        return res.status(403).send("Usuário sem permissão para criar filme!");
+    }
     var response = await movieController.createMovie(req.body);
 
     if (response == null) {
@@ -28,7 +31,9 @@ router.post('/', jwt({ secret: process.env.SECRET, algorithms: ["HS256"] }), asy
 });
 
 router.patch("/:id/image", jwt({ secret: process.env.SECRET, algorithms: ["HS256"] }), upload.single("image"), async (req, res) => {
-
+    if (req.auth.permission == 0){
+        return res.status(403).send("Usuário sem permissão para criar filme!");
+    }
     const { id } = req.params;
     const { file } = req;
     const imageUrl = file.filename;
