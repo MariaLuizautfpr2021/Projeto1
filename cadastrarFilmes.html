@@ -22,7 +22,7 @@
             }
 
             var xhttp = new XMLHttpRequest();
-            xhttp.open("POST", "http://localhost:3000/users/data", true);
+            xhttp.open("POST", "https://projeto1-production-aefd.up.railway.app/users/data", true);
             xhttp.setRequestHeader("Content-type", "application/json");
             xhttp.setRequestHeader("Authorization", `Bearer ${localStorage.getItem("token")}`);
             xhttp.send();
@@ -61,13 +61,18 @@
                     return false;
                 }
 
+                if (imagem == null) {
+                    msg.innerHTML = ("Selecione uma imagem!");
+                    return false;
+                }
+
                 salvar(titulo, descricao, genero, imagem);
             }
 
             function salvar(titulo, descricao, genero, imagem) {
                 var msg = document.getElementById("msg");
                 var xhttp = new XMLHttpRequest();
-                xhttp.open("POST", "http://localhost:3000/movies", true);
+                xhttp.open("POST", "https://projeto1-production-aefd.up.railway.app/movies", true);
                 xhttp.setRequestHeader("Content-type", "application/json");
                 xhttp.setRequestHeader("Authorization", `Bearer ${localStorage.getItem("token")}`);
                 xhttp.send(JSON.stringify({
@@ -93,7 +98,7 @@
                 var data = new FormData();
                 data.append("image",imagem, imagem.name);
                 var xhttp = new XMLHttpRequest();
-                xhttp.open("PATCH", `http://localhost:3000/movies/${id}/image`, true);
+                xhttp.open("PATCH", `https://projeto1-production-aefd.up.railway.app/movies/${id}/image`, true);
                 xhttp.setRequestHeader("Authorization", `Bearer ${localStorage.getItem("token")}`);
                 xhttp.send(data);
 

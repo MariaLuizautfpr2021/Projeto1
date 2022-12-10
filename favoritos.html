@@ -22,7 +22,7 @@
             }
 
             var xhttp = new XMLHttpRequest();
-            xhttp.open("POST", "http://localhost:3000/users/data", true);
+            xhttp.open("POST", "https://projeto1-production-aefd.up.railway.app/users/data", true);
             xhttp.setRequestHeader("Content-type", "application/json");
             xhttp.setRequestHeader("Authorization", `Bearer ${localStorage.getItem("token")}`);
             xhttp.send();
@@ -108,7 +108,7 @@
                 parametroTitulo = document.querySelector("#tituloConteudo").value;
                 xhttp.open(
                     "GET",
-                    "http://localhost:3000/movies?search_value=" + parametroTitulo, // apiKey é a chave de acesso à API, limite de 1000 requisições gratuitas
+                    "https://projeto1-production-aefd.up.railway.app/movies?search_value=" + parametroTitulo, // apiKey é a chave de acesso à API, limite de 1000 requisições gratuitas
                     true
                 );
                 xhttp.setRequestHeader("Content-type", "application/json");
@@ -134,20 +134,26 @@
 
                                     //Cria h5 para o titulo
                                     var tituloConteudo = document.createElement("h5");
+                                    tituloConteudo.classList = "titulo_conteudo";
                                     tituloConteudo.innerHTML = item.title;
 
                                     //Cria a imagem do Conteudo
                                     var img = document.createElement("img");
                                     img.classList.add("img_conteudo");
-                                    img.setAttribute("src", `http://localhost:3000/files/${imgResponse}`);
-
-                                    //Adiciona titulo e a img na div
-                                    divConteudo.appendChild(tituloConteudo);
-                                    divConteudo.appendChild(img);
+                                    img.setAttribute("src", `https://projeto1-production-aefd.up.railway.app/files/${imgResponse}`);
 
                                     var descricaoConteudo = document.createElement("p");
-                                    descricaoConteudo.innerHTML = item.description;
+                                    descricaoConteudo.innerText = "Descrição: "+item.description;
+                                  
+                                    var generoConteudo = document.createElement("p");
+                                    generoConteudo.innerText = "Gênero: "+item.genre;
+                                    //Adiciona titulo e a img na div
+                                    divConteudo.appendChild(tituloConteudo);
+                                    divConteudo.appendChild(generoConteudo);
                                     divConteudo.appendChild(descricaoConteudo);
+                                    divConteudo.appendChild(img);
+
+                                   
                                     
                                     //Adiciona a div no divConteudos
                                     divConteudos.insertAdjacentElement("beforeend", divConteudo);
